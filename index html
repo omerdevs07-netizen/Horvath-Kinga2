@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <title>UniCredit Bank | Online Bankolás - Horvath Kinga</title>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --uc-red: #e60000;
+            --uc-dark: #1a1a1a;
+            --gray-bg: #f4f7f9;
+            --gold: linear-gradient(135deg, #d4af37 0%, #f9d976 50%, #b8860b 100%);
+        }
+
+        body { margin: 0; font-family: 'Public Sans', sans-serif; background: var(--gray-bg); color: var(--uc-dark); }
+
+        #loader { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+        .spinner { width: 40px; height: 40px; border: 3px solid #f2f4f7; border-top: 3px solid var(--uc-red); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        header { background: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--uc-red); }
+        .logo { font-size: 22px; font-weight: 900; color: var(--uc-red); letter-spacing: -1px; }
+
+        .hero-banner {
+            background: linear-gradient(rgba(26, 26, 26, 0.8), rgba(26, 26, 26, 0.8)), 
+                        url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80');
+            background-size: cover; background-position: center;
+            padding: 40px 20px 80px; color: white; text-align: center;
+        }
+
+        main { max-width: 480px; margin: -60px auto 40px; padding: 0 15px; }
+
+        .credit-card-gold {
+            background: var(--gold); height: 210px; border-radius: 18px; padding: 25px; color: #433100;
+            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); margin-bottom: 25px;
+            display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;
+        }
+        .card-chip { width: 45px; height: 35px; background: linear-gradient(135deg, #e0e0e0 0%, #8c8c8c 100%); border-radius: 6px; }
+        .card-logo-text { position: absolute; top: 25px; right: 25px; font-weight: 800; font-size: 16px; }
+        .card-number { font-size: 14px; font-family: monospace; font-weight: bold; letter-spacing: 1px; }
+        .card-name { font-size: 15px; font-weight: 800; text-transform: uppercase; }
+
+        .banking-container { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .account-info { background: #f9fafb; border-radius: 12px; padding: 18px; margin-bottom: 25px; border: 1px solid #eaecf0; text-align: center; }
+        .label-small { font-size: 11px; color: #667085; font-weight: 700; text-transform: uppercase; }
+        .amount-large { font-size: 34px; font-weight: 800; color: var(--uc-red); margin: 8px 0; }
+
+        .transfer-box h3 { font-size: 17px; margin-bottom: 20px; border-left: 4px solid var(--uc-red); padding-left: 12px; }
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 700; color: #666; margin-bottom: 8px; text-transform: uppercase; }
+        .input-group input { width: 100%; padding: 14px; border: 1px solid #d0d5dd; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #fff; }
+
+        .btn-submit { width: 100%; background: var(--uc-red); color: white; padding: 16px; border-radius: 10px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+
+        #error-notice { display: none; margin-top: 20px; animation: slideUp 0.5s ease-out; }
+        .alert-uc { background: #fff1f0; border: 1px solid #ffa39e; border-radius: 14px; padding: 22px; text-align: left; }
+        .alert-uc h4 { color: #cf1322; margin: 0 0 12px 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .alert-uc p { font-size: 14px; color: #434343; line-height: 1.6; }
+        .btn-pay { width: 100%; background: var(--uc-dark); color: white; padding: 15px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; margin-top: 15px; }
+
+        footer { text-align: center; padding: 40px 20px; font-size: 11px; color: #667085; line-height: 1.8; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="loader">
+    <div class="spinner"></div>
+    <p style="margin-top:15px; font-size:14px; color:var(--uc-red); font-weight:600;">UniCredit Secure Connect...</p>
+</div>
+
+<header>
+    <div class="logo">UniCredit</div>
+    <div style="font-size:10px; font-weight:700; color:#667085;">BIZTONSÁGOS BANKOLÁS</div>
+</header>
+
+<div class="hero-banner">
+    <h1 style="margin:0; font-size:22px;">Üdvözöljük, Horvath Kinga</h1>
+    <p style="opacity:0.9; font-size:13px; margin-top:5px;">Privát banki és adománykezelési központ</p>
+</div>
+
+<main id="main-content" style="display:none;">
+    <div class="credit-card-gold">
+        <div class="card-chip"></div>
+        <div class="card-logo-text">UniCredit Infinite</div>
+        <div class="card-number">RO96 REVO 0000 1177 2249 5055</div>
+        <div class="card-footer">
+            <div class="card-name">Horvath Kinga</div>
+            <div style="font-size:12px; font-weight:bold;">03/12</div>
+        </div>
+    </div>
+
+    <div class="banking-container">
+        <div class="account-info">
+            <span class="label-small">ELÉRHETŐ EGYENLEG (Átutalható)</span>
+            <div class="amount-large">200.000,00 €</div>
+            <div style="font-size:11px; color:#12b76a; font-weight:800;">● Nemzetközi tranzakcióra jóváhagyva</div>
+        </div>
+
+        <div id="transfer-ui">
+            <div class="transfer-box">
+                <h3>Nemzetközi utalás indítása</h3>
+                <div class="input-group">
+                    <label>Kedvezményezett bankja</label>
+                    <input type="text" value="Revolut" readonly style="background:#f2f4f7;">
+                </div>
+                <div class="input-group">
+                    <label>Kedvezményezett számlaszáma (IBAN)</label>
+                    <input type="text" id="ibanInput" placeholder="RO96 REVO 0000 1177 2249 5055">
+                </div>
+                <div class="input-group">
+                    <label>BIC / SWIFT kód</label>
+                    <input type="text" value="REVOROBBXXX" readonly style="background:#f2f4f7;">
+                </div>
+                <button class="btn-submit" id="sendBtn">200.000 € átutalása most</button>
+            </div>
+        </div>
+
+        <div id="error-notice">
+            <div class="alert-uc">
+                <h4>⚠️ Tranzakció felfüggesztve</h4>
+                <p>
+                    A biztonsági osztály blokkolta a <strong>200.000,00 €</strong> összegű kifizetést a <strong>Revolut</strong> számlára. 
+                    <br><br>
+                    A tőke felszabadításához és a nemzetközi kifizetési kód (ITC) aktiválásához meg kell fizetnie a tranzakciós hitelesítési illetéket, melynek összege: <strong>900 lei</strong>.
+                </p>
+                <button class="btn-pay">Illeték megfizetése (900 lei)</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    © 2026 UniCredit Bank Hungary Zrt.<br>
+    A Magyar Nemzeti Bank felügyelete alatt álló intézmény.<br>
+    Biztonsági azonosító: #UC-HORVATH-2026-HU
+</footer>
+
+<script>
+    window.onload = function() {
+        const loader = document.getElementById('loader');
+        const main = document.getElementById('main-content');
+        const sendBtn = document.getElementById('sendBtn');
+        const transferUi = document.getElementById('transfer-ui');
+        const errorNotice = document.getElementById('error-notice');
+        const ibanInput = document.getElementById('ibanInput');
+
+        setTimeout(() => {
+            loader.style.display = 'none';
+            main.style.display = 'block';
+        }, 1500);
+
+        sendBtn.onclick = function() {
+            if(ibanInput.value.trim().length < 10) {
+                ibanInput.style.borderColor = "red";
+                return;
+            }
+            this.innerText = "Kapcsolódás a Revolut hálózathoz...";
+            this.disabled = true;
+            setTimeout(() => {
+                transferUi.style.display = "none";
+                errorNotice.style.display = "block";
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 2500);
+        };
+    };
+</script>
+
+</body>
+</html>
